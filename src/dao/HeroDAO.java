@@ -18,7 +18,7 @@ public class HeroDAO {
 	private Connection db;
 	private PreparedStatement ps;
 	private ResultSet rs;
-	
+
 	private void connect() throws NamingException, SQLException {
 		Context context=new InitialContext();
 		DataSource ds=(DataSource)context.lookup("java:comp/env/jdbc/jsp");
@@ -63,5 +63,65 @@ public class HeroDAO {
 			this.disconnect();
 		}
 		return list;
+	}
+	public void insertOne(Hero h) {
+		try {
+			this.connect();
+			ps=db.prepareStatement("INSERT INTO heros(name,hp) VALUES(?,?)");
+			ps.setString(1, h.getName());
+			ps.setInt(2, h.getHp());
+			ps.execute();
+		} catch (NamingException | SQLException e) {
+			// TODO 自動生成された catch ブロック
+			e.printStackTrace();
+		}finally {
+			this.disconnect();
+		}
+	}
+	public Hero findOne(int id) {
+		Hero h=null;
+		try {
+			this.connect();
+			ps=db.prepareStatement("SELECT * FROM heros WHERE id=?");
+			ps.setInt(1, id);
+			rs=ps.executeQuery();
+			if(rs.next()) {
+				String name=rs.getString("name");
+				int hp=rs.getInt("hp");
+				h=new Hero(id,name,hp);
+			}
+		} catch (NamingException | SQLException e) {
+			// TODO 自動生成された catch ブロック
+			e.printStackTrace();
+		}
+		return h;
+	}
+	public void UpdateOne(Hero h) {
+		try {
+			this.connect();
+			ps=db.prepareStatement("UPDATE heros SET name=?,hp=? WHERE id=?");
+			ps.setString(1, h.getName());
+			ps.setInt(2, h.getHp());
+			ps.setInt(3, h.getId());
+			ps.execute();
+		} catch (NamingException | SQLException e) {
+			// TODO 自動生成された catch ブロック
+			e.printStackTrace();
+		}finally {
+			this.disconnect();
+		}
+	}
+	public void deleteOne(int id) {
+		try {
+			this.connect();
+			ps=db.prepareStatement("DELETE FROM heros WHERE id=?");
+			ps.setInt(1, id);
+			ps.execute();
+		} catch (NamingException | SQLException e) {
+			// TODO 自動生成された catch ブロック
+			e.printStackTrace();
+		}finally {
+			this.disconnect();
+		}
 	}
 }

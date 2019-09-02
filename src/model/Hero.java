@@ -7,6 +7,11 @@ public class Hero implements Serializable{
 	private String name;
 	private int hp;
 	public Hero() {}
+	public Hero(String name, int hp) {
+		super();
+		this.name = name;
+		this.hp = hp;
+	}
 	public Hero(int id, String name, int hp) {
 		super();
 		this.id = id;
@@ -31,6 +36,6 @@ public class Hero implements Serializable{
 	public void setHp(int hp) {
 		this.hp = hp;
 	}
-	
+
 
 }
